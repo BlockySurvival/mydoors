@@ -14,14 +14,13 @@ for i in ipairs(fdoor_list) do
 	local desc = fdoor_list[i][1]
 	local img = fdoor_list[i][2]
 
-
-doors.register_door("my_fancy_doors:"..img.."_locked", {
-	description = desc.." Locked",
-	inventory_image = "myfdoors_"..img.."_inv.png",
-	groups = {choppy=2,cracky=2,door=1},
-	tiles = {{ name = "myfdoors_"..img..".png", backface_culling = true }},
-	protected = true,
-})
+	doors.register_door("my_fancy_doors:"..img.."_locked", {
+		description = desc.." Locked",
+		inventory_image = "myfdoors_"..img.."_inv.png",
+		groups = {choppy=2,cracky=2,door=1},
+		tiles = {{ name = "myfdoors_"..img..".png", backface_culling = true }},
+		protected = true,
+	})
 end
 
 -- Crafts

@@ -19,14 +19,13 @@ for i in ipairs(cdoor_list) do
 	local desc = cdoor_list[i][1]
 	local img = cdoor_list[i][2]
 
-
-doors.register("my_castle_doors:"..img.."_locked", {
-	description = desc.." Locked",
-	inventory_image = "mydoors_"..img.."_inv.png",
-	groups = {choppy=2,cracky=2,door=1},
-	tiles = {{ name = "mydoors_"..img..".png", backface_culling = true }},
-	protected = true,
-})
+	doors.register("my_castle_doors:"..img.."_locked", {
+		description = desc.." Locked",
+		inventory_image = "mydoors_"..img.."_inv.png",
+		groups = {choppy=2,cracky=2,door=1},
+		tiles = {{ name = "mydoors_"..img..".png", backface_culling = true }},
+		protected = true,
+	})
 end
 
 ---[[ Crafts

@@ -16,17 +16,16 @@ for i in ipairs(hdoor_list) do
 	local desc = hdoor_list[i][2]
 	--local dimg = hdoor_list[i][3]
 
-
-doors.register_door("my_hidden_doors:hidden_door"..img, {
-	description = desc.." Locked",
-	inventory_image = "mydoors_"..img.."_inv.png",
-	groups = {choppy=2,cracky=2,door=1},
-	only_placer_can_open = false,
-	tiles = {{ name = "mydoors_"..img..".png", backface_culling = true }},
-	protected = false,
-})
-
+	doors.register_door("my_hidden_doors:hidden_door"..img, {
+		description = desc.." Locked",
+		inventory_image = "mydoors_"..img.."_inv.png",
+		groups = {choppy=2,cracky=2,door=1},
+		only_placer_can_open = false,
+		tiles = {{ name = "mydoors_"..img..".png", backface_culling = true }},
+		protected = false,
+	})
 end
+
 doors.register_door("my_hidden_doors:hidden_door_grey", {
 	description = "Grey Door Locked",
 	inventory_image = "mydoors_grey_inv.png",

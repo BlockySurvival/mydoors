@@ -33,30 +33,31 @@ local function my_door_wood_block_stairs(nodename, def)
 		)	
 	end	
 end
+
 for i in ipairs(door_wood) do
 	local color = door_wood[i][1]
 	local desc = door_wood[i][2]
 	local img = door_wood[i][3]
 
-my_door_wood_block_stairs("my_door_wood:wood_"..color, {
-	description = desc.." Wood",
-	drawtype = "normal",
-	paramtype = "light",
-	tiles = {"mydoors_"..img.."_wood.png"},
-	paramtype = "light",
-	groups = {cracky = 2, choppy = 2},
-	sounds = default.node_sound_wood_defaults(),
+	my_door_wood_block_stairs("my_door_wood:wood_"..color, {
+		description = desc.." Wood",
+		drawtype = "normal",
+		paramtype = "light",
+		tiles = {"mydoors_"..img.."_wood.png"},
+		paramtype = "light",
+		groups = {cracky = 2, choppy = 2},
+		sounds = default.node_sound_wood_defaults(),
 
-})
+	})
 
--- Crafts
+	-- Crafts
 
-minetest.register_craft({
-	output = "my_door_wood:wood_"..color,
-	recipe = {
-		{"default:wood", "", ""},
-		{"dye:"..color, "", ""},
-		{"", "", ""}
-	}
-})
+	minetest.register_craft({
+		output = "my_door_wood:wood_"..color,
+		recipe = {
+			{"default:wood", "", ""},
+			{"dye:"..color, "", ""},
+			{"", "", ""}
+		}
+	})
 end

@@ -14,23 +14,23 @@ for i in ipairs(cdoor_list) do
 	local itm = cdoor_list[i][4]
 
 
-doors.register_door("my_default_doors:door"..num.."_locked", {
-	description = desc.." Locked",
-	inventory_image = "mydoors_"..img.."_inv.png",
-	groups = {choppy=2,cracky=2,door=1},
-	tiles = {{name="mydoors_"..img..".png", backface_culling = true}},
-	protected = true,
-})
+	doors.register_door("my_default_doors:door"..num.."_locked", {
+		description = desc.." Locked",
+		inventory_image = "mydoors_"..img.."_inv.png",
+		groups = {choppy=2,cracky=2,door=1},
+		tiles = {{name="mydoors_"..img..".png", backface_culling = true}},
+		protected = true,
+	})
 
 
--- Crafts
+	-- Crafts
 
-minetest.register_craft({
-	output = "my_default_doors:door"..num.."_locked 1",
-	recipe = {
-		{"", "", ""},
-		{"default:"..itm, "doors:door_steel", "default:"..itm},
-		{"", "default:steel_ingot", ""}
-	}
-})
+	minetest.register_craft({
+		output = "my_default_doors:door"..num.."_locked 1",
+		recipe = {
+			{"", "", ""},
+			{"default:"..itm, "doors:door_steel", "default:"..itm},
+			{"", "default:steel_ingot", ""}
+		}
+	})
 end
