@@ -32,7 +32,7 @@ minetest.register_node("my_misc_doors:door2a", {
 
 	on_place = function(itemstack, placer, pointed_thing)
 		local pos1 = pointed_thing.above
-		local pos2 = vector.add(pos, {x=0,y=1,z=0})
+		local pos2 = vector.add(pos1, {x=0,y=1,z=0})
 
 		if not placer or not placer:is_player() then
 			return
