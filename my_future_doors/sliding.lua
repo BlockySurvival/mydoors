@@ -31,15 +31,8 @@ local recipes = {
 		{"default:steel_ingot", "default:steel_ingot", "dye:brown"},
 		{ "default:steel_ingot", "default:steelblock",""}},
 }
-for i in ipairs (doors) do
-	local doora = doors[i][1]
-	local doorb = doors[i][2]
-	local doorc = doors[i][3]
-	local doord = doors[i][4]
-	local num = doors[i][5]
-	local des = doors[i][6]
-	local recipe = recipes[i]
 
+local function add_door(doora, doorb, doorc, doord, num, des, recipe)
 	local function onplace(itemstack, placer, pointed_thing)
 		local pos1 = pointed_thing.above
 		local pos2 = vector.add(pos1, {x=0,y=1,z=0})
@@ -250,4 +243,8 @@ for i in ipairs (doors) do
 		output = "my_future_doors:door"..num.."a 2",
 		recipe = recipe
 	})
+end
+
+for i, door in ipairs(doors) do
+	add_door(unpack(door), recipes[i])
 end

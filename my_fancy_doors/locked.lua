@@ -9,11 +9,7 @@ local fdoor_list = {   --Number , Description , Inven Image , Image
 	{"Fancy Door 8" , "door8"},
 }
 
-
-for i in ipairs(fdoor_list) do
-	local desc = fdoor_list[i][1]
-	local img = fdoor_list[i][2]
-
+local function add_door(desc, img)
 	doors.register_door("my_fancy_doors:"..img.."_locked", {
 		description = desc.." Locked",
 		inventory_image = "myfdoors_"..img.."_inv.png",
@@ -22,6 +18,11 @@ for i in ipairs(fdoor_list) do
 		protected = true,
 	})
 end
+
+for _,fdoor in ipairs(fdoor_list) do
+	add_door(unpack(fdoor))
+end
+
 
 -- Crafts
 

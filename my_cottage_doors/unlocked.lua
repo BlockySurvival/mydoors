@@ -3,11 +3,7 @@ local cdoor_list = {   --Number , Description , Inven Image , Image
 	{"Cottage Door 2" , "door2"},
 }
 
-
-for i in ipairs(cdoor_list) do
-	local desc = cdoor_list[i][1]
-	local img = cdoor_list[i][2]
-
+local function add_door(desc, img)
 	doors.register_door("my_cottage_doors:"..img, {
 		description = desc,
 		inventory_image = "mycdoors_"..img.."_inv.png",
@@ -16,6 +12,11 @@ for i in ipairs(cdoor_list) do
 		protected = false,
 	})
 end
+
+for _,cdoor in ipairs(cdoor_list) do
+	add_door(unpack(cdoor))
+end
+
 
 -- Crafts
 

@@ -1,4 +1,3 @@
-
 local doorcol = {
 	{"white",	"White",	"^[colorize:white:120"},
 	{"red",		"Red",		"^[colorize:red:120"},
@@ -8,12 +7,8 @@ local doorcol = {
 	{"dark_grey",	"Dark grey",	"^[colorize:white:120^[colorize:black:200"},
 	{"yellow",	"Yellow",	"^[colorize:yellow:100"},
 }
-for i in ipairs (doorcol) do
 
-	local col = doorcol[i][1]
-	local des = doorcol[i][2]
-	local tint = doorcol[i][3]
-
+local function add_door(col, des, tint)
 	minetest.register_node("my_saloon_doors:door1a_"..col, {
 		description = des.." Saloon Door ",
 		tiles = {"mydoors_saloon_bottom.png"..tint},
@@ -117,4 +112,8 @@ for i in ipairs (doorcol) do
 			-- minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="my_saloon_doors:door1b_"..col,param2=node.param2})
 		end,
 	})
+end
+
+for _,door in ipairs(doorcol) do
+	add_door(unpack(door))
 end

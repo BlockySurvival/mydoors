@@ -4,15 +4,8 @@ local doors = {
 	{"my_sliding_doors:door3a","my_sliding_doors:door3b","my_sliding_doors:door3c","my_sliding_doors:door3d","3","Framed"},
 }
 
-for i in ipairs (doors) do
-	local doora = doors[i][1]
-	local doorb = doors[i][2]
-	local doorc = doors[i][3]
-	local doord = doors[i][4]
-	local num = doors[i][5]
-	local des = doors[i][6]
-
-	function onplace(itemstack, placer, pointed_thing)
+local function add_door(doora, doorb, doorc, doord, num, des)
+	local function onplace(itemstack, placer, pointed_thing)
 		local pos1 = pointed_thing.above
 		local pos = pos1
 		local pos2 = minetest.find_node_near(pos1, 1, {doora})
@@ -57,11 +50,11 @@ for i in ipairs (doors) do
 
 	end
 
-	function afterdestruct(pos, oldnode)
+	local function afterdestruct(pos, oldnode)
 		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="air"})
 	end
 
-	function rightclick(pos, node, player, itemstack, pointed_thing)
+	local function rightclick(pos, node, player, itemstack, pointed_thing)
 		if node.name == doora then
 			minetest.set_node(pos, {name=doorc, param2=node.param2})
 			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doord, param2=node.param2})
@@ -92,7 +85,7 @@ for i in ipairs (doors) do
 		end
 	end
 
-	function afterplace(pos, placer, itemstack, pointed_thing)
+	local function afterplace(pos, placer, itemstack, pointed_thing)
 		local node = minetest.get_node(pos)
 		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doord,param2=node.param2})
 	end
@@ -465,4 +458,8 @@ for i in ipairs (doors) do
 			}
 		},
 	})
+end
+
+for _,door in ipairs(doors) do
+	add_door(unpack(door))
 end

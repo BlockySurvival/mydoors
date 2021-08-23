@@ -1,8 +1,6 @@
 local doorcolors = {"white","red","black"}
 
-for i = 1,#doorcolors do
-	local col = doorcolors[i]
-
+local function add_door(col)
 	minetest.register_node("my_future_doors:door1a_"..col, {
 		description = "Door 1a",
 		tiles = {
@@ -205,4 +203,8 @@ for i = 1,#doorcolors do
 			{"my_door_wood:wood_"..col, "wool:"..col, "my_door_wood:wood_"..col}
 		}
 	})
+end
+
+for _,col in ipairs(doorcolors) do
+	add_door(col)
 end

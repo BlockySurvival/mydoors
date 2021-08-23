@@ -6,14 +6,7 @@ local cdoor_list = {   --Number , Description , Inven Image , Image
 	{ "5", "Mese Door" , "mese", "mese_crystal"},
 }
 
-
-for i in ipairs(cdoor_list) do
-	local num = cdoor_list[i][1]
-	local desc = cdoor_list[i][2]
-	local img = cdoor_list[i][3]
-	local itm = cdoor_list[i][4]
-
-
+local function add_door(num, desc, img, itm)
 	doors.register_door("my_default_doors:door"..num.."_locked", {
 		description = desc.." Locked",
 		inventory_image = "mydoors_"..img.."_inv.png",
@@ -22,9 +15,7 @@ for i in ipairs(cdoor_list) do
 		protected = true,
 	})
 
-
 	-- Crafts
-
 	minetest.register_craft({
 		output = "my_default_doors:door"..num.."_locked 1",
 		recipe = {
@@ -33,4 +24,8 @@ for i in ipairs(cdoor_list) do
 			{"", "default:steel_ingot", ""}
 		}
 	})
+end
+
+for _,cdoor in ipairs(cdoor_list) do
+	add_door(unpack(cdoor))
 end
