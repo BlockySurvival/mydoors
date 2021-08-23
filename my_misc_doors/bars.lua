@@ -32,8 +32,7 @@ minetest.register_node("my_misc_doors:door2a", {
 
 	on_place = function(itemstack, placer, pointed_thing)
 		local pos1 = pointed_thing.above
-		local pos2 = {x=pos1.x, y=pos1.y, z=pos1.z}
-		pos2.y = pos2.y+1
+		local pos2 = vector.add(pos, {x=0,y=1,z=0})
 
 		if
 		not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
@@ -43,42 +42,26 @@ minetest.register_node("my_misc_doors:door2a", {
 			return
 		end
 
-		local pt = pointed_thing.above
-		local pt2 = {x=pt.x, y=pt.y, z=pt.z}
-		pt2.y = pt2.y+1
 		local p2 = minetest.dir_to_facedir(placer:get_look_dir())
-		local pt3 = {x=pt.x, y=pt.y, z=pt.z}
-		local p4 = 0
-		if p2 == 0 then
-			pt3.x = pt3.x-1
-			p4 = 2
-		elseif p2 == 1 then
-			pt3.z = pt3.z+1
-			p4 = 3
-		elseif p2 == 2 then
-			pt3.x = pt3.x+1
-			p4 = 0
-		elseif p2 == 3 then
-			pt3.z = pt3.z-1
-			p4 = 1
-		end
+		local p4 = (p2+2)%4
+		local pos3 = vector.add(pos1, minetest.facedir_to_dir((p2-1)%4))
 
 		local player_name = placer:get_player_name()
-		if minetest.is_protected(pt, player_name) then
-			minetest.record_protection_violation(pt, player_name)
+		if minetest.is_protected(pos1, player_name) then
+			minetest.record_protection_violation(pos1, player_name)
 			return
 		end
-		if minetest.is_protected(pt2, player_name) then
-			minetest.record_protection_violation(pt2, player_name)
+		if minetest.is_protected(pos2, player_name) then
+			minetest.record_protection_violation(pos2, player_name)
 			return
 		end
 
-		if minetest.get_node(pt3).name == "my_misc_doors:door2a" then
-			minetest.set_node(pt, {name="my_misc_doors:door2a", param2=p4})
-			minetest.set_node(pt2, {name="my_misc_doors:door2b", param2=p4})
+		if minetest.get_node(pos3).name == "my_misc_doors:door2a" then
+			minetest.set_node(pos1, {name="my_misc_doors:door2a", param2=p4})
+			minetest.set_node(pos2, {name="my_misc_doors:door2b", param2=p4})
 		else
-			minetest.set_node(pt, {name="my_misc_doors:door2a", param2=p2})
-			minetest.set_node(pt2, {name="my_misc_doors:door2b", param2=p2})
+			minetest.set_node(pos1, {name="my_misc_doors:door2a", param2=p2})
+			minetest.set_node(pos2, {name="my_misc_doors:door2b", param2=p2})
 		end
 
 		if not (minetest.settings:get_bool("creative_mode") or minetest.check_player_privs(placer:get_player_name(), {creative = true})) then
@@ -87,32 +70,22 @@ minetest.register_node("my_misc_doors:door2a", {
 		return itemstack
 	end,
 	after_destruct = function(pos, oldnode)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="air"})
 	end,
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local timer = minetest.get_node_timer(pos)
-		local a = minetest.get_node({x=pos.x, y=pos.y, z=pos.z-1})
-		local b = minetest.get_node({x=pos.x, y=pos.y, z=pos.z+1})
-		local c = minetest.get_node({x=pos.x+1, y=pos.y, z=pos.z})
-		local d = minetest.get_node({x=pos.x-1, y=pos.y, z=pos.z})
 		minetest.set_node(pos, {name="my_misc_doors:door2c", param2=node.param2})
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name="my_misc_doors:door2d", param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="my_misc_doors:door2d", param2=node.param2})
 
-		if a.name == "my_misc_doors:door2a" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name="my_misc_doors:door2c", param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name="my_misc_doors:door2d", param2=a.param2})
-		end
-		if b.name == "my_misc_doors:door2a" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name="my_misc_doors:door2c", param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name="my_misc_doors:door2d", param2=b.param2})
-		end
-		if c.name == "my_misc_doors:door2a" then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name="my_misc_doors:door2c", param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name="my_misc_doors:door2d", param2=c.param2})
-		end
-		if d.name == "my_misc_doors:door2a" then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name="my_misc_doors:door2c", param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name="my_misc_doors:door2d", param2=d.param2})
+		-- Open neighbouring doors
+		for i=0,3 do
+			local dir = minetest.facedir_to_dir(i)
+			local neighbour_pos = vector.add(pos, dir)
+			local neighbour = minetest.get_node(neighbour_pos)
+			if neighbour.name == "my_misc_doors:door2a" then
+				minetest.set_node(neighbour_pos, {name="my_misc_doors:door2c", param2=neighbour.param2})
+				minetest.set_node(vector.add(neighbour_pos, {x=0,y=1,z=0}), {name="my_misc_doors:door2d", param2=neighbour.param2})
+			end
 		end
 
 		timer:start(3)
@@ -176,36 +149,26 @@ minetest.register_node("my_misc_doors:door2c", {
 	after_place_node = function(pos, placer, itemstack, pointed_thing)
 		local node = minetest.get_node(pos)
 		local timer = minetest.get_node_timer(pos)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="my_misc_doors:door2d",param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="my_misc_doors:door2d",param2=node.param2})
 		timer:start(3)
 	end,
 	after_destruct = function(pos, oldnode)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="air"})
 	end,
 	on_timer = function(pos, elapsed)
 		local node = minetest.get_node(pos)
-		local a = minetest.get_node({x=pos.x, y=pos.y, z=pos.z-1})
-		local b = minetest.get_node({x=pos.x, y=pos.y, z=pos.z+1})
-		local c = minetest.get_node({x=pos.x+1, y=pos.y, z=pos.z})
-		local d = minetest.get_node({x=pos.x-1, y=pos.y, z=pos.z})
 		minetest.set_node(pos, {name="my_misc_doors:door2a", param2=node.param2})
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name="my_misc_doors:door2b", param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="my_misc_doors:door2b", param2=node.param2})
 
-		if a.name == "my_misc_doors:door2c" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name="my_misc_doors:door2a", param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name="my_misc_doors:door2b", param2=a.param2})
-		end
-		if b.name == "my_misc_doors:door2c" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name="my_misc_doors:door2a", param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name="my_misc_doors:door2b", param2=b.param2})
-		end
-		if c.name == "my_misc_doors:door2c" then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name="my_misc_doors:door2a", param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name="my_misc_doors:door2b", param2=c.param2})
-		end
-		if d.name == "my_misc_doors:door2c" then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name="my_misc_doors:door2a", param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name="my_misc_doors:door2b", param2=d.param2})
+		-- Close neighbouring doors
+		for i=0,3 do
+			local dir = minetest.facedir_to_dir(i)
+			local neighbour_pos = vector.add(pos, dir)
+			local neighbour = minetest.get_node(neighbour_pos)
+			if neighbour.name == "my_misc_doors:door2c" then
+				minetest.set_node(neighbour_pos, {name="my_misc_doors:door2a", param2=neighbour.param2})
+				minetest.set_node(vector.add(neighbour_pos, {x=0,y=1,z=0}), {name="my_misc_doors:door2b", param2=neighbour.param2})
+			end
 		end
 	end,
 })

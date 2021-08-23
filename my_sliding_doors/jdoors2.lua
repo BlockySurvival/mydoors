@@ -2,7 +2,7 @@ local doors = {
 	{"my_sliding_doors:door1a","my_sliding_doors:door1b","my_sliding_doors:door1c","my_sliding_doors:door1d","1","White Right"},
 	{"my_sliding_doors:door2a","my_sliding_doors:door2b","my_sliding_doors:door2c","my_sliding_doors:door2d","2","Flower Right"},
 	{"my_sliding_doors:door3a","my_sliding_doors:door3b","my_sliding_doors:door3c","my_sliding_doors:door3d","3","Framed Right"},
-	}
+}
 for i in ipairs (doors) do
 	local doora = doors[i][1]
 	local doorb = doors[i][2]
@@ -13,7 +13,8 @@ for i in ipairs (doors) do
 
 	function onplace(itemstack, placer, pointed_thing)
 		local pos1 = pointed_thing.above
-		local pos2 = {x=pos1.x, y=pos1.y + 1, z=pos1.z}
+		local pos2 = vector.add(pos, {x=0,y=1,z=0})
+
 		if
 		not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
 		not minetest.registered_nodes[minetest.get_node(pos2).name].buildable_to or
@@ -21,46 +22,34 @@ for i in ipairs (doors) do
 			return
 		end
 
-		local pt = pointed_thing.above
-		local pt2 = {x=pt.x, y=pt.y, z=pt.z}
-		pt2.y = pt2.y+1
 		local p2 = minetest.dir_to_facedir(placer:get_look_dir())
-		local pt3 = {x=pt.x, y=pt.y, z=pt.z}
-
-		if p2 == 0 then
-			pt3.x = pt3.x-1
-		elseif p2 == 1 then
-			pt3.z = pt3.z+1
-		elseif p2 == 2 then
-			pt3.x = pt3.x+1
-		elseif p2 == 3 then
-			pt3.z = pt3.z-1
-		end
+		local p4 = (p2+2)%4
+		local pos3 = vector.add(pos1, minetest.facedir_to_dir((p2-1)%4))
 
 		local player_name = placer:get_player_name()
-		if minetest.is_protected(pt, player_name) then
-			minetest.record_protection_violation(pt2, player_name)
+		if minetest.is_protected(pos1, player_name) then
+			minetest.record_protection_violation(pos1, player_name)
 			return
 		end
-		if minetest.is_protected(pt2, player_name) then
-			minetest.record_protection_violation(pt2, player_name)
+		if minetest.is_protected(pos2, player_name) then
+			minetest.record_protection_violation(pos2, player_name)
 			return
 		end
-		if minetest.is_protected(pt3, player_name) then
-			minetest.record_protection_violation(pt3, player_name)
+		if minetest.is_protected(pos3, player_name) then
+			minetest.record_protection_violation(pos3, player_name)
 			return
 		end
 
-		if minetest.get_node(pt3).name ~= "air" then
+		if minetest.get_node(pos3).name ~= "air" then
 			minetest.chat_send_player(placer:get_player_name(),"Not enough room")
 			return
 		end
-		if minetest.get_node(pt3).name == doora then
-			minetest.set_node(pt, {name=doora.."2", param2=p2})
-			minetest.set_node(pt2, {name=doorb.."2", param2=p2})
+		if minetest.get_node(pos3).name == doora then
+			minetest.set_node(pos1, {name=doora.."2", param2=p2})
+			minetest.set_node(pos2, {name=doorb.."2", param2=p2})
 		else
-			minetest.set_node(pt, {name=doora.."2", param2=p2})
-			minetest.set_node(pt2, {name=doorb.."2", param2=p2})
+			minetest.set_node(pos1, {name=doora.."2", param2=p2})
+			minetest.set_node(pos2, {name=doorb.."2", param2=p2})
 		end
 
 		if not (minetest.settings:get_bool("creative_mode") or minetest.check_player_privs(placer:get_player_name(), {creative = true})) then
@@ -70,7 +59,7 @@ for i in ipairs (doors) do
 	end
 
 	function afterdestruct(pos, oldnode)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="air"})
 	end
 
 	function rightclick(pos, node, player, itemstack, pointed_thing)
@@ -158,7 +147,7 @@ for i in ipairs (doors) do
 
 	function afterplace(pos, placer, itemstack, pointed_thing)
 		local node = minetest.get_node(pos)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name=doord,param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doord,param2=node.param2})
 	end
 
 

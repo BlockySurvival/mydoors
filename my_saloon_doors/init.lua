@@ -45,8 +45,7 @@ for i in ipairs (doorcol) do
 
 		on_place = function(itemstack, placer, pointed_thing)
 			local pos1 = pointed_thing.above
-			local pos2 = {x=pos1.x, y=pos1.y, z=pos1.z}
-			pos2.y = pos2.y+1
+			local pos2 = vector.add(pos1, {x=0,y=1,z=0})
 
 			if
 			not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
@@ -112,7 +111,7 @@ for i in ipairs (doorcol) do
 		},
 		on_timer = function(pos, elapsed)
 			local node = minetest.get_node(pos)
-			minetest.set_node(pos,{name="my_saloon_doors:door1a_"..col,param2=node.param2})
+			minetest.set_node(pos,{name="my_saloon_doors:door1a_"..col, param2=node.param2})
 			-- minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="my_saloon_doors:door1b_"..col,param2=node.param2})
 		end,
 	})

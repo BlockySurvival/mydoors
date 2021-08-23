@@ -2,7 +2,8 @@ local doors = {
 	{"my_sliding_doors:door1a","my_sliding_doors:door1b","my_sliding_doors:door1c","my_sliding_doors:door1d","1","White"},
 	{"my_sliding_doors:door2a","my_sliding_doors:door2b","my_sliding_doors:door2c","my_sliding_doors:door2d","2","Flower"},
 	{"my_sliding_doors:door3a","my_sliding_doors:door3b","my_sliding_doors:door3c","my_sliding_doors:door3d","3","Framed"},
-	}
+}
+
 for i in ipairs (doors) do
 	local doora = doors[i][1]
 	local doorb = doors[i][2]
@@ -17,10 +18,11 @@ for i in ipairs (doors) do
 		local pos2 = minetest.find_node_near(pos1, 1, {doora})
 		local par = minetest.dir_to_facedir(placer:get_look_dir())
 		local par2 = par + 2
+		local above = vector.add(pos, {x=0,y=1,z=0})
 
 		if
 		not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
-		not minetest.registered_nodes[minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name].buildable_to or
+		not minetest.registered_nodes[minetest.get_node(above).name].buildable_to or
 		not placer or
 		not placer:is_player() then
 			return
@@ -31,8 +33,8 @@ for i in ipairs (doors) do
 			minetest.record_protection_violation(pos, player_name)
 			return
 		end
-		if minetest.is_protected({x=pos.x,y=pos.y+1,z=pos.z}, player_name) then
-			minetest.record_protection_violation({x=pos.x,y=pos.y+1,z=pos.z}, player_name)
+		if minetest.is_protected(above, player_name) then
+			minetest.record_protection_violation(above, player_name)
 			return
 		end
 
@@ -40,10 +42,10 @@ for i in ipairs (doors) do
 		if par2 == 5 then par2 = 1 end
 		if pos2 == nil then
 			minetest.set_node(pos, {name=doora,param2=par})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name=doorb,param2=par})
+			minetest.set_node(above, {name=doorb,param2=par})
 		else
 			minetest.set_node(pos, {name=doora.."2",param2=par2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name=doorb.."2",param2=par2})
+			minetest.set_node(above, {name=doorb.."2",param2=par2})
 		end
 
 		if not (minetest.settings:get_bool("creative_mode") or minetest.check_player_privs(placer:get_player_name(), {creative = true})) then
@@ -54,7 +56,7 @@ for i in ipairs (doors) do
 	end
 
 	function afterdestruct(pos, oldnode)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="air"})
 	end
 
 	function rightclick(pos, node, player, itemstack, pointed_thing)
@@ -140,7 +142,7 @@ for i in ipairs (doors) do
 
 	function afterplace(pos, placer, itemstack, pointed_thing)
 		local node = minetest.get_node(pos)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name=doord,param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doord,param2=node.param2})
 	end
 
 	minetest.register_node(doora, {
@@ -331,7 +333,8 @@ for i in ipairs (doors) do
 		on_place = function(itemstack, placer, pointed_thing)
 			local p2 = minetest.dir_to_facedir(placer:get_look_dir())
 			local pos = pointed_thing.above
-			local na = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z})
+			local pos2 = vector.add(pos, {x=0,y=1,z=0})
+			local na = minetest.get_node(pos2)
 
 			if
 			not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
@@ -346,14 +349,14 @@ for i in ipairs (doors) do
 				minetest.record_protection_violation(pos, player_name)
 				return
 			end
-			if minetest.is_protected({x=pos.x,y=pos.y+1,z=pos.z}, player_name) then
-				minetest.record_protection_violation({x=pos.x,y=pos.y+1,z=pos.z}, player_name)
+			if minetest.is_protected(pos2, player_name) then
+				minetest.record_protection_violation(pos2, player_name)
 				return
 			end
 
 			if na.name == "air" then
-				minetest.set_node(pos,{name = "my_sliding_doors:jpanel"..num, param2 = p2})
-				minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name = "my_sliding_doors:jpanel_top"..num, param2 = p2})
+				minetest.set_node(pos,  {name = "my_sliding_doors:jpanel"..num, param2 = p2})
+				minetest.set_node(pos2, {name = "my_sliding_doors:jpanel_top"..num, param2 = p2})
 			else
 				return
 			end
@@ -364,7 +367,7 @@ for i in ipairs (doors) do
 			return itemstack
 		end,
 		on_destruct = function(pos)
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="air"})
 		end,
 	})
 	minetest.register_node("my_sliding_doors:jpanel_top"..num, {
@@ -436,7 +439,8 @@ for i in ipairs (doors) do
 		on_place = function(itemstack, placer, pointed_thing)
 			local p2 = minetest.dir_to_facedir(placer:get_look_dir())
 			local pos = pointed_thing.above
-			local na = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z})
+			local pos2 = vector.add(pos, {x=0,y=1,z=0})
+			local na = minetest.get_node(pos2)
 
 			if
 			not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
@@ -451,14 +455,14 @@ for i in ipairs (doors) do
 				minetest.record_protection_violation(pos, player_name)
 				return
 			end
-			if minetest.is_protected({x=pos.x,y=pos.y+1,z=pos.z}, player_name) then
-				minetest.record_protection_violation({x=pos.x,y=pos.y+1,z=pos.z}, player_name)
+			if minetest.is_protected(pos2, player_name) then
+				minetest.record_protection_violation(pos2, player_name)
 				return
 			end
 
 			if na.name == "air" then
-				minetest.set_node(pos,{name = "my_sliding_doors:jpanel_corner_"..num, param2 = p2})
-				minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name = "my_sliding_doors:jpanel_corner_top"..num, param2 = p2})
+				minetest.set_node(pos,  {name = "my_sliding_doors:jpanel_corner_"..num, param2 = p2})
+				minetest.set_node(pos2, {name = "my_sliding_doors:jpanel_corner_top"..num, param2 = p2})
 			else
 				return
 			end
@@ -469,7 +473,7 @@ for i in ipairs (doors) do
 			return itemstack
 		end,
 		on_destruct = function(pos)
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+			minetest.set_node(pos2, {name="air"})
 		end,
 	})
 	minetest.register_node("my_sliding_doors:jpanel_corner_top"..num, {

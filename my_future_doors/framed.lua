@@ -41,8 +41,8 @@ for i = 1,#doorcolors do
 
 		on_place = function(itemstack, placer, pointed_thing)
 			local pos1 = pointed_thing.above
-			local pos2 = {x=pos1.x, y=pos1.y, z=pos1.z}
-			pos2.y = pos2.y+1
+			local pos2 = vector.add(pos1, {x=0,y=1,z=0})
+	
 			if
 			not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
 			not minetest.registered_nodes[minetest.get_node(pos2).name].buildable_to or
@@ -64,16 +64,16 @@ for i = 1,#doorcolors do
 		end,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			local node = minetest.get_node(pos)
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="my_future_doors:door1b_"..col,param2=node.param2})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="my_future_doors:door1b_"..col,param2=node.param2})
 		end,
 		after_destruct = function(pos, oldnode)
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="air"})
 		end,
 		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 			if node.name == "my_future_doors:door1a_"..col then
 				local timer = minetest.get_node_timer(pos)
 				minetest.set_node(pos,{name="my_future_doors:door1c_"..col,param2=node.param2})
-				minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="my_future_doors:door1d_"..col,param2=node.param2})
+				minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="my_future_doors:door1d_"..col,param2=node.param2})
 				timer:start(3)
 			end
 		end,
@@ -149,16 +149,16 @@ for i = 1,#doorcolors do
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			local node = minetest.get_node(pos)
 			local timer = minetest.get_node_timer(pos)
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="my_future_doors:door1d_"..col,param2=node.param2})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="my_future_doors:door1d_"..col,param2=node.param2})
 			timer:start(3)
 		end,
 		after_destruct = function(pos, oldnode)
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="air"})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="air"})
 		end,
 		on_timer = function(pos, elapsed)
 			local node = minetest.get_node(pos)
 			minetest.set_node(pos,{name="my_future_doors:door1a_"..col,param2=node.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="my_future_doors:door1b_"..col,param2=node.param2})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="my_future_doors:door1b_"..col,param2=node.param2})
 		end,
 	})
 	minetest.register_node("my_future_doors:door1d_"..col, {
