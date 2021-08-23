@@ -63,86 +63,35 @@ for i in ipairs (doors) do
 	end
 
 	function rightclick(pos, node, player, itemstack, pointed_thing)
-		local a = minetest.get_node({x=pos.x, y=pos.y, z=pos.z-1})
-		local b = minetest.get_node({x=pos.x, y=pos.y, z=pos.z+1})
-		local c = minetest.get_node({x=pos.x+1, y=pos.y, z=pos.z})
-		local d = minetest.get_node({x=pos.x-1, y=pos.y, z=pos.z})
 
 		if node.name == doora.."2" then
 			minetest.set_node(pos, {name=doorc.."2", param2=node.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name=doord.."2", param2=node.param2})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doord.."2", param2=node.param2})
 		elseif node.name == doorc.."2" then
 			minetest.set_node(pos, {name=doora.."2", param2=node.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name=doorb.."2", param2=node.param2})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doorb.."2", param2=node.param2})
 		end
 
-		if a.name == doora then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name=doorc, param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name=doord, param2=a.param2})
+		-- Open neighbouring doors
+		for i=0,3 do
+			local dir = minetest.facedir_to_dir(i)
+			local neighbour_pos = vector.add(pos, dir)
+			local neighbour_above = vector.add(neighbour_pos, {x=0,y=1,z=0})
+			local neighbour = minetest.get_node(neighbour_pos)
+			if neighbour.name == doora then
+				minetest.set_node(neighbour_pos,   {name=doorc, param2=neighbour.param2})
+				minetest.set_node(neighbour_above, {name=doord, param2=neighbour.param2})
+			elseif neighbour.name == doora.."2" then
+				minetest.set_node(neighbour_pos,   {name=doorc.."2", param2=neighbour.param2})
+				minetest.set_node(neighbour_above, {name=doord.."2", param2=neighbour.param2})
+			elseif neighbour.name == doorc then
+				minetest.set_node(neighbour_pos,   {name=doora, param2=neighbour.param2})
+				minetest.set_node(neighbour_above, {name=doorb, param2=neighbour.param2})
+			elseif neighbour.name == doorc.."2" then
+				minetest.set_node(neighbour_pos,   {name=doora.."2", param2=neighbour.param2})
+				minetest.set_node(neighbour_above, {name=doorb.."2", param2=neighbour.param2})
+			end
 		end
-		if b.name == doora then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name=doorc, param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name=doord, param2=b.param2})
-		end
-		if c.name == doora then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name=doorc, param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name=doord, param2=c.param2})
-		end
-		if d.name == doora then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name=doorc, param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name=doord, param2=d.param2})
-		end
-
-		if a.name == doora.."2" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name=doorc.."2", param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name=doord.."2", param2=a.param2})
-		end
-		if b.name == doora.."2" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name=doorc.."2", param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name=doord.."2", param2=b.param2})
-		end
-		if c.name == doora.."2" then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name=doorc.."2", param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name=doord.."2", param2=c.param2})
-		end
-		if d.name == doora.."2" then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name=doorc.."2", param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name=doord.."2", param2=d.param2})
-		end
-		if a.name == doorc then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name=doora, param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name=doorb, param2=a.param2})
-		end
-		if b.name == doorc then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name=doora, param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name=doorb, param2=b.param2})
-		end
-		if c.name == doorc then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name=doora, param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name=doorb, param2=c.param2})
-		end
-		if d.name == doorc then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name=doora, param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name=doorb, param2=d.param2})
-		end
-
-		if a.name == doorc.."2" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name=doora.."2", param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name=doorb.."2", param2=a.param2})
-		end
-		if b.name == doorc.."2" then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name=doora.."2", param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name=doorb.."2", param2=b.param2})
-		end
-		if c.name == doorc.."2" then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name=doora.."2", param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name=doorb.."2", param2=c.param2})
-		end
-		if d.name == doorc.."2" then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name=doora.."2", param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name=doorb.."2", param2=d.param2})
-		end
-
 	end
 
 	function afterplace(pos, placer, itemstack, pointed_thing)

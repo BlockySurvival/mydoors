@@ -112,7 +112,7 @@ for i in ipairs (doorcol) do
 		on_timer = function(pos, elapsed)
 			local node = minetest.get_node(pos)
 			minetest.set_node(pos,{name="my_saloon_doors:door1a_"..col, param2=node.param2})
-			-- minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name="my_saloon_doors:door1b_"..col,param2=node.param2})
+			-- minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="my_saloon_doors:door1b_"..col,param2=node.param2})
 		end,
 	})
 end

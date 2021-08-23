@@ -86,29 +86,18 @@ for i in ipairs (doors) do
 
 	local function rightclick(pos, node, player, itemstack, pointed_thing)
 		local timer = minetest.get_node_timer(pos)
-		local a = minetest.get_node({x=pos.x, y=pos.y, z=pos.z-1})
-		local b = minetest.get_node({x=pos.x, y=pos.y, z=pos.z+1})
-		local c = minetest.get_node({x=pos.x+1, y=pos.y, z=pos.z})
-		local d = minetest.get_node({x=pos.x-1, y=pos.y, z=pos.z})
-
 		minetest.set_node(pos, {name=doorc, param2=node.param2})
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name=doord, param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doord, param2=node.param2})
 
-		if a.name == doora then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name=doorc, param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name=doord, param2=a.param2})
-		end
-		if b.name == doora then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name=doorc, param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name=doord, param2=b.param2})
-		end
-		if c.name == doora then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name=doorc, param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name=doord, param2=c.param2})
-		end
-		if d.name == doora then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name=doorc, param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name=doord, param2=d.param2})
+		-- Open neighbouring doors
+		for i=0,3 do
+			local dir = minetest.facedir_to_dir(i)
+			local neighbour_pos = vector.add(pos, dir)
+			local neighbour = minetest.get_node(neighbour_pos)
+			if neighbour.name == "my_misc_doors:door2a" then
+				minetest.set_node(neighbour_pos, {name=doorc, param2=neighbour.param2})
+				minetest.set_node(vector.add(neighbour_pos, {x=0,y=1,z=0}), {name=doord, param2=neighbour.param2})
+			end
 		end
 
 		timer:start(3)
@@ -117,34 +106,24 @@ for i in ipairs (doors) do
 	local function afterplace(pos, placer, itemstack, pointed_thing)
 		local node = minetest.get_node(pos)
 		local timer = minetest.get_node_timer(pos)
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z},{name=doord,param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doord, param2=node.param2})
 		timer:start(3)
 	end
 
 	local function ontimer(pos, elapsed)
 		local node = minetest.get_node(pos)
-		local a = minetest.get_node({x=pos.x, y=pos.y, z=pos.z-1})
-		local b = minetest.get_node({x=pos.x, y=pos.y, z=pos.z+1})
-		local c = minetest.get_node({x=pos.x+1, y=pos.y, z=pos.z})
-		local d = minetest.get_node({x=pos.x-1, y=pos.y, z=pos.z})
 		minetest.set_node(pos, {name=doora, param2=node.param2})
-		minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z}, {name=doorb, param2=node.param2})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name=doorb, param2=node.param2})
 
-		if a.name == doorc then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z-1}, {name=doora, param2=a.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z-1}, {name=doorb, param2=a.param2})
-		end
-		if b.name == doorc then
-			minetest.set_node({x=pos.x, y=pos.y, z=pos.z+1}, {name=doora, param2=b.param2})
-			minetest.set_node({x=pos.x,y=pos.y+1,z=pos.z+1}, {name=doorb, param2=b.param2})
-		end
-		if c.name == doorc then
-			minetest.set_node({x=pos.x+1, y=pos.y, z=pos.z}, {name=doora, param2=c.param2})
-			minetest.set_node({x=pos.x+1,y=pos.y+1,z=pos.z}, {name=doorb, param2=c.param2})
-		end
-		if d.name == doorc then
-			minetest.set_node({x=pos.x-1, y=pos.y, z=pos.z}, {name=doora, param2=d.param2})
-			minetest.set_node({x=pos.x-1,y=pos.y+1,z=pos.z}, {name=doorb, param2=d.param2})
+		-- Close neighbouring doors
+		for i=0,3 do
+			local dir = minetest.facedir_to_dir(i)
+			local neighbour_pos = vector.add(pos, dir)
+			local neighbour = minetest.get_node(neighbour_pos)
+			if neighbour.name == "my_misc_doors:door2c" then
+				minetest.set_node(neighbour_pos, {name=doora, param2=neighbour.param2})
+				minetest.set_node(vector.add(neighbour_pos, {x=0,y=1,z=0}), {name=doorb, param2=neighbour.param2})
+			end
 		end
 	end
 
