@@ -14,11 +14,14 @@ for i in ipairs (doors) do
 	function onplace(itemstack, placer, pointed_thing)
 		local pos1 = pointed_thing.above
 		local pos2 = vector.add(pos, {x=0,y=1,z=0})
+	
+		if not placer or not placer:is_player() then
+			return
+		end
 
-		if
-		not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
-		not minetest.registered_nodes[minetest.get_node(pos2).name].buildable_to or
-		not placer or not placer:is_player() then
+		if not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
+		   not minetest.registered_nodes[minetest.get_node(pos2).name].buildable_to then
+			minetest.chat_send_player(placer:get_player_name(), "Not enough room")
 			return
 		end
 
@@ -41,7 +44,7 @@ for i in ipairs (doors) do
 		end
 
 		if minetest.get_node(pos3).name ~= "air" then
-			minetest.chat_send_player(placer:get_player_name(),"Not enough room")
+			minetest.chat_send_player(placer:get_player_name(), "Not enough room")
 			return
 		end
 		if minetest.get_node(pos3).name == doora then
@@ -59,7 +62,7 @@ for i in ipairs (doors) do
 	end
 
 	function afterdestruct(pos, oldnode)
-		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}),{name="air"})
+		minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="air"})
 	end
 
 	function rightclick(pos, node, player, itemstack, pointed_thing)

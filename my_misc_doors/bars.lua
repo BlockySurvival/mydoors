@@ -34,11 +34,13 @@ minetest.register_node("my_misc_doors:door2a", {
 		local pos1 = pointed_thing.above
 		local pos2 = vector.add(pos, {x=0,y=1,z=0})
 
-		if
-		not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
-		not minetest.registered_nodes[minetest.get_node(pos2).name].buildable_to or
-		not placer or
-		not placer:is_player() then
+		if not placer or not placer:is_player() then
+			return
+		end
+
+		if not minetest.registered_nodes[minetest.get_node(pos1).name].buildable_to or
+		   not minetest.registered_nodes[minetest.get_node(pos2).name].buildable_to then
+			minetest.chat_send_player(placer:get_player_name(), "Not enough room")
 			return
 		end
 

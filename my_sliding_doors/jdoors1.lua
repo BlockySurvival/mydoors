@@ -19,12 +19,14 @@ for i in ipairs (doors) do
 		local par = minetest.dir_to_facedir(placer:get_look_dir())
 		local par2 = par + 2
 		local above = vector.add(pos, {x=0,y=1,z=0})
+	
+		if not placer or not placer:is_player() then
+			return
+		end
 
-		if
-		not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
-		not minetest.registered_nodes[minetest.get_node(above).name].buildable_to or
-		not placer or
-		not placer:is_player() then
+		if not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
+		   not minetest.registered_nodes[minetest.get_node(above).name].buildable_to then
+			minetest.chat_send_player(placer:get_player_name(), "Not enough room")
 			return
 		end
 
@@ -285,12 +287,14 @@ for i in ipairs (doors) do
 			local pos = pointed_thing.above
 			local pos2 = vector.add(pos, {x=0,y=1,z=0})
 			local na = minetest.get_node(pos2)
+	
+			if not placer or not placer:is_player() then
+				return
+			end
 
-			if
-			not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
-			not minetest.registered_nodes[na.name].buildable_to or
-			not placer or
-			not placer:is_player() then
+			if not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
+			   not minetest.registered_nodes[na.name].buildable_to then
+				minetest.chat_send_player(placer:get_player_name(), "Not enough room")
 				return
 			end
 
@@ -391,12 +395,14 @@ for i in ipairs (doors) do
 			local pos = pointed_thing.above
 			local pos2 = vector.add(pos, {x=0,y=1,z=0})
 			local na = minetest.get_node(pos2)
+	
+			if not placer or not placer:is_player() then
+				return
+			end
 
-			if
-			not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
-			not minetest.registered_nodes[na.name].buildable_to or
-			not placer or
-			not placer:is_player() then
+			if not minetest.registered_nodes[minetest.get_node(pos).name].buildable_to or
+			   not minetest.registered_nodes[na.name].buildable_to then
+				minetest.chat_send_player(placer:get_player_name(), "Not enough room")
 				return
 			end
 
@@ -423,7 +429,7 @@ for i in ipairs (doors) do
 			return itemstack
 		end,
 		on_destruct = function(pos)
-			minetest.set_node(pos2, {name="air"})
+			minetest.set_node(vector.add(pos, {x=0,y=1,z=0}), {name="air"})
 		end,
 	})
 	minetest.register_node("my_sliding_doors:jpanel_corner_top"..num, {
