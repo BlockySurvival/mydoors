@@ -1,35 +1,32 @@
 local doors = {
-	{"my_future_doors:door2a","my_future_doors:door2b","my_future_doors:door2c","my_future_doors:door2d","2","Steel"},
-	{"my_future_doors:door3a","my_future_doors:door3b","my_future_doors:door3c","my_future_doors:door3d","3","Squared"},
-	{"my_future_doors:door4a","my_future_doors:door4b","my_future_doors:door4c","my_future_doors:door4d","4","Dark"},
-	{"my_future_doors:door6a","my_future_doors:door6b","my_future_doors:door6c","my_future_doors:door6d","6","Points"},
-	{"my_future_doors:door7a","my_future_doors:door7b","my_future_doors:door7c","my_future_doors:door7d","7","Snow Flake"},
-	{"my_future_doors:door8a","my_future_doors:door8b","my_future_doors:door8c","my_future_doors:door8d","8","Blue Steel"},
-	{"my_future_doors:door9a","my_future_doors:door9b","my_future_doors:door9c","my_future_doors:door9d","9","Tan Steel"},
-}
-
-local recipes = {
-	{{"default:steel_ingot", "default:steelblock", ""},
-		{"default:steel_ingot", "default:steel_ingot", ""},
-		{"default:steelblock", "default:steel_ingot", ""}},
-	{{"default:steel_ingot","default:steel_ingot", ""},
-		{"default:steel_ingot", "default:steel_ingot", ""},
-		{"default:steelblock", "default:steelblock", ""}},
-	{{"default:steel_ingot","default:steel_ingot", ""},
-		{"default:steel_ingot", "default:steel_ingot", "dye:black"},
-		{"default:steelblock", "default:steelblock", ""}},
-	{{"default:steel_ingot","default:steel_ingot", ""},
-		{"default:steelblock", "default:steelblock", ""},
-		{"default:steel_ingot", "default:steel_ingot", ""}},
-	{{"default:steel_ingot", "default:steelblock", ""},
-		{"default:steel_ingot", "default:steel_ingot", ""},
-		{ "default:steel_ingot", "default:steelblock",""}},
-	{{"default:steel_ingot", "default:steelblock", ""},
-		{"default:steel_ingot", "default:steel_ingot", "dye:blue"},
-		{ "default:steel_ingot", "default:steelblock",""}},
-	{{"default:steel_ingot", "default:steelblock", ""},
-		{"default:steel_ingot", "default:steel_ingot", "dye:brown"},
-		{ "default:steel_ingot", "default:steelblock",""}},
+	{"my_future_doors:door2a","my_future_doors:door2b","my_future_doors:door2c","my_future_doors:door2d","2","Steel",
+			{{"default:steel_ingot", "default:steelblock", ""},
+				{"default:steel_ingot", "default:steel_ingot", ""},
+				{"default:steelblock", "default:steel_ingot", ""}}},
+	{"my_future_doors:door3a","my_future_doors:door3b","my_future_doors:door3c","my_future_doors:door3d","3","Squared",
+			{{"default:steel_ingot","default:steel_ingot", ""},
+				{"default:steel_ingot", "default:steel_ingot", ""},
+				{"default:steelblock", "default:steelblock", ""}}},
+	{"my_future_doors:door4a","my_future_doors:door4b","my_future_doors:door4c","my_future_doors:door4d","4","Dark",
+			{{"default:steel_ingot","default:steel_ingot", ""},
+				{"default:steel_ingot", "default:steel_ingot", "dye:black"},
+				{"default:steelblock", "default:steelblock", ""}}},
+	{"my_future_doors:door6a","my_future_doors:door6b","my_future_doors:door6c","my_future_doors:door6d","6","Points",
+			{{"default:steel_ingot","default:steel_ingot", ""},
+				{"default:steelblock", "default:steelblock", ""},
+				{"default:steel_ingot", "default:steel_ingot", ""}}},
+	{"my_future_doors:door7a","my_future_doors:door7b","my_future_doors:door7c","my_future_doors:door7d","7","Snow Flake",
+			{{"default:steel_ingot", "default:steelblock", ""},
+				{"default:steel_ingot", "default:steel_ingot", ""},
+				{ "default:steel_ingot", "default:steelblock",""}}},
+	{"my_future_doors:door8a","my_future_doors:door8b","my_future_doors:door8c","my_future_doors:door8d","8","Blue Steel",
+			{{"default:steel_ingot", "default:steelblock", ""},
+				{"default:steel_ingot", "default:steel_ingot", "dye:blue"},
+				{ "default:steel_ingot", "default:steelblock",""}}},
+	{"my_future_doors:door9a","my_future_doors:door9b","my_future_doors:door9c","my_future_doors:door9d","9","Tan Steel",
+			{{"default:steel_ingot", "default:steelblock", ""},
+				{"default:steel_ingot", "default:steel_ingot", "dye:brown"},
+				{ "default:steel_ingot", "default:steelblock",""}}},
 }
 
 local function add_door(doora, doorb, doorc, doord, num, des, recipe)
@@ -246,5 +243,5 @@ local function add_door(doora, doorb, doorc, doord, num, des, recipe)
 end
 
 for i, door in ipairs(doors) do
-	add_door(unpack(door), recipes[i])
+	add_door(unpack(door))
 end
